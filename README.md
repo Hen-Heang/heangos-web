@@ -24,6 +24,20 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Corporate network / TLS inspection
+
+If `next dev` (or any Neon/Supabase CLI) fails with `SELF_SIGNED_CERT_IN_CHAIN`
+or "self-signed certificate in certificate chain", your network is doing TLS
+inspection (observed here: Somansa DLP) and Node doesn't trust its root CA —
+even though your OS and browser already do. Fix it for Node specifically:
+
+1. Export the intercepting root CA to a PEM file (ask IT, or export it from
+   Windows' trusted root store / your browser's certificate settings).
+2. Set `NODE_EXTRA_CA_CERTS=/path/to/that.pem` before running `npm run dev`,
+   `next build`, or any Neon/Supabase CLI — Node ignores the OS trust store,
+   so this has to be explicit. Keep the PEM out of git; it's machine/network
+   specific.
+
 ## Environment variables
 
 Copy `.env.example` to `.env.local` and fill in real values. Never commit
@@ -45,11 +59,16 @@ Copy `.env.example` to `.env.local` and fill in real values. Never commit
 
 ## Neon setup
 
-1. Create a Neon project and database.
-2. Copy its connection string into `DATABASE_URL` in `.env.local`.
-3. Apply the SQL migrations in [db/migrations](db/migrations) — see
-   [db/README.md](db/README.md) for exact commands. Nothing runs
-   automatically; migrations are applied by hand.
+Using the `heangos-web` Neon project (id `divine-darkness-19631415`), `main`
+branch, `neondb` database. The `users`/`tasks`/`goals` migrations in
+[db/migrations](db/migrations) are already applied there — see
+[db/README.md](db/README.md) if you need to re-apply or add a new one.
+
+To point a fresh checkout at it:
+
+1. Get the pooled connection string: `neon connection-string --project-id divine-darkness-19631415 --pooled`
+   (or from the Neon console → Connect).
+2. Put it in `.env.local` as `DATABASE_URL`.
 
 ## Future: Spring Boot backend
 
