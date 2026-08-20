@@ -1,5 +1,6 @@
 import type { Task } from "@/types/task";
 import type { Goal } from "@/types/goal";
+import type { Reminder } from "@/types/reminder";
 
 export interface TodaySummary {
   date: string;
@@ -11,5 +12,10 @@ export interface TodaySummary {
   goals: {
     active: number;
     items: Goal[];
+  };
+  reminders: {
+    overdueCount: number;
+    dueTodayCount: number;
+    items: Reminder[];
   };
 }

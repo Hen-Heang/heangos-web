@@ -3,8 +3,10 @@ import { getTodaySummary } from "@/lib/services/today-service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { QuickAddTask } from "@/components/today/quick-add-task";
 import { QuickAddGoal } from "@/components/today/quick-add-goal";
+import { QuickAddReminder } from "@/components/today/quick-add-reminder";
 import { TaskRow } from "@/components/today/task-row";
 import { GoalRow } from "@/components/today/goal-row";
+import { ReminderRow } from "@/components/today/reminder-row";
 
 function greeting(): string {
   const hour = new Date().getHours();
@@ -75,6 +77,30 @@ export default async function TodayPage() {
             <div className="divide-y divide-border">
               {today.goals.items.map((goal) => (
                 <GoalRow key={goal.id} goal={goal} />
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="flex-row items-center justify-between">
+          <div>
+            <CardTitle>Reminders</CardTitle>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {today.reminders.dueTodayCount} due today
+              {today.reminders.overdueCount > 0 ? ` · ${today.reminders.overdueCount} overdue` : ""}
+            </p>
+          </div>
+          <QuickAddReminder />
+        </CardHeader>
+        <CardContent>
+          {today.reminders.items.length === 0 ? (
+            <p className="py-4 text-sm text-muted-foreground">Nothing upcoming. Add a reminder to get started.</p>
+          ) : (
+            <div className="divide-y divide-border">
+              {today.reminders.items.map((reminder) => (
+                <ReminderRow key={reminder.id} reminder={reminder} />
               ))}
             </div>
           )}

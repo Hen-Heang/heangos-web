@@ -77,7 +77,6 @@ export const remindersItem: NavItem = {
   label: "Reminders",
   icon: Bell,
   color: "text-rose-500",
-  soon: true,
 };
 
 export const accountItem: NavItem = {
